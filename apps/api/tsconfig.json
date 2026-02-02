@@ -17,9 +17,7 @@
         "declarationMap": true,
         "sourceMap": true,
         "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "allowImportingTsExtensions": true,
-        "noEmit": true
+        "noFallthroughCasesInSwitch": true
     },
     "include": [
         "src/**/*"
