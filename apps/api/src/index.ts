@@ -16,6 +16,8 @@ app.use(cors({
 app.use(express.json());
 
 // Serve uploaded files
+// NOTE: This will only work for the duration of the lambda execution on Vercel.
+// Files are not persistent.
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Health check (no rate limit)
@@ -38,10 +40,12 @@ app.use('/api/v1', routes);
 // Error handling
 app.use(errorMiddleware);
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📚 API available at http://localhost:${PORT}/api/v1`);
-});
+// Start server only if not running in Vercel (Vercel exports the app)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on http://localhost:${PORT}`);
+        console.log(`📚 API available at http://localhost:${PORT}/api/v1`);
+    });
+}
 
 export default app;
