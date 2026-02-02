@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     host: true, // Expose to local network 
     // (for mobile access)
+    allowedHosts: true, // Allow Railway and other hosting domains
     proxy: {
       '/api': {
         target: 'http://localhost:3002',
