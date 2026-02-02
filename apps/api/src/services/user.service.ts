@@ -62,7 +62,7 @@ export class UserService {
 
     // Complete profile for OAuth users
     async completeProfile(userId: string, data: {
-        role: string;
+        role: 'admin' | 'manager' | 'cashier' | 'kitchen';
         storeName?: string;
         storeAddress?: string;
         storePhone?: string;
