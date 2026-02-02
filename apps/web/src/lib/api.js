@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/v1` : '/api/v1';
 
 // Generic fetch wrapper with credentials for cookie-based auth
 async function fetchAPI(endpoint, options = {}) {
