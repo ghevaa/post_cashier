@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useCurrency } from '../../contexts/StoreContext';
 
-const API_BASE = 'http://localhost:3002';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 
 const ProductCatalog = ({ products = [], loading = false, onAddToCart }) => {
     const [searchQuery, setSearchQuery] = useState('');
