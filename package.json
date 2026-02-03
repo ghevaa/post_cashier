@@ -10,7 +10,9 @@
     "tailwindcss": "^4.1.18"
   },
   "scripts": {
-  "build": "tsc --pretty false"
-}
-
+    "build": "npm run build --workspace=apps/web",
+    "build:api": "npm run build --workspace=apps/api",
+    "dev": "npm run dev --workspace=apps/web",
+    "dev:api": "npm run dev --workspace=apps/api"
+  }
 }
