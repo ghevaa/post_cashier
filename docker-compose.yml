@@ -1,4 +1,5 @@
 services:
+  # PostgreSQL Database
   postgres:
     image: postgres:16-alpine
     container_name: postkasir-db
@@ -11,6 +12,56 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postkasir-network
+
+  # Backend (Express API)
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: postkasir-api
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - DATABASE_URL=postgresql://postkasir:postkasir123@postgres:5432/postkasir
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-your-secret-key-here}
+      - BETTER_AUTH_URL=http://localhost:3002
+      - FRONTEND_URL=http://localhost:3000
+      - MIDTRANS_SERVER_KEY=${MIDTRANS_SERVER_KEY:-}
+      - MIDTRANS_CLIENT_KEY=${MIDTRANS_CLIENT_KEY:-}
+      - MIDTRANS_IS_PRODUCTION=false
+    volumes:
+      - api-uploads:/app/uploads
+    depends_on:
+      - postgres
+    networks:
+      - postkasir-network
+
+  # Frontend (Vite React)
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3002
+    container_name: postkasir-web
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - postkasir-network
 
 volumes:
   postgres_data:
+  api-uploads:
+
+
+networks:
+  postkasir-network:
+    driver: bridge
