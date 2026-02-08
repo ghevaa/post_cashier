@@ -62,9 +62,10 @@ export const auth = betterAuth({
             enabled: false,
         },
         defaultCookieAttributes: {
-            sameSite: 'lax' as const,
+            // For cross-origin (Vercel frontend -> Railway backend), use 'none' in production
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' as const : 'lax' as const,
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: process.env.NODE_ENV === 'production', // Must be true when sameSite is 'none'
             path: '/',
         },
     },
